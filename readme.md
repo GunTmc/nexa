@@ -6,8 +6,9 @@ Employee Management API adalah aplikasi berbasis Node.js dengan Sequelize sebaga
 ## 🚀 Teknologi yang Digunakan
 - **Node.js** - Runtime JavaScript
 - **Express.js** - Framework Backend
-- **Sequelize** - ORM untuk PostgreSQL, MySQL, dan lainnya
-- **MySQL/PostgreSQL** - Database
+- **Sequelize** - ORM untuk  MySQL
+- **Validation Request** Joi js
+- **File Management** path js
 
 ## 📂 Struktur Proyek
 ```
@@ -47,23 +48,42 @@ Employee Management API adalah aplikasi berbasis Node.js dengan Sequelize sebaga
    DB_NAME=employees_db
    DB_DIALECT=mysql
    ```
-5. Jalankan migrasi database:
+5. Docker File:
    ```bash
-   npx sequelize db:migrate
+      FROM node:18-alpine
+      WORKDIR /app
+      COPY package*.json ./
+      RUN npm install
+      COPY . .
+      EXPOSE 3000
+      CMD ["npm", "start"]
    ```
-6. Jalankan server:
+6. Docker Compose:
    ```bash
-   npm start
+      version: "3.8"
+
+      services:
+      app:
+         build: .
+         container_name: employee_app
+         ports:
+            - "3000:3000"
+         volumes:
+            - .:/app
+            - /app/node_modules
+         environment:
+            - NODE_ENV=production
+         command: ["npm", "start"]
    ```
 
 ## 🔥 Endpoint API
 | Method | Endpoint | Deskripsi |
 |--------|---------|-----------|
-| GET | /employees | Mendapatkan semua data karyawan |
-| GET | /employees/:id | Mendapatkan data karyawan berdasarkan ID |
-| POST | /employees | Menambahkan karyawan baru |
-| PUT | /employees/:id | Mengupdate data karyawan |
-| DELETE | /employees/:id | Menghapus karyawan |
+| POST | /auth/login | login |
+| GET | /employee | Mendapatkan semua data karyawan |
+| POST | /employee | Menambahkan karyawan baru |
+| PATCH | /employee/:id | Mengupdate data karyawan |
+| PATCH | /employee/:id/status | Mengupdate status data karyawan |
 
 ## ✨ Kontributor
 - **Gunawan Prasetya** - Developer
